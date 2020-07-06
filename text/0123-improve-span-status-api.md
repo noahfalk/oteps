@@ -4,9 +4,12 @@ Allow the Span Status API to represent more kinds of status
 
 ## Motivation
 
-Right now OpenTelemetry Status is defined as an enumeration of gRPC status codes. Although I couldn't find design criteria written down for this API I fear it is too narrowly defined to be useful across the full breadth of scenarios OpenTelemetry targets.
+Right now OpenTelemetry Status is defined as an enumeration of gRPC status codes.
+Although I couldn't find design criteria written down for this API I fear it is too narrowly defined to be useful across the full breadth of scenarios OpenTelemetry targets.
 
-OpenTelemetry allows Spans to be created to represent any operation, including those which don't involve communication with another component (Kind = Internal). These underlying operations can have native status representations from a particular domain or a language such as POSIX status codes, HRESULTs, many variations of exceptions, error messages, HTTP status, or gRPC status. However to capture the status as part of an OpenTelemetry span it must first be mapped to something in OpenTelemetry's object model and this mapping has the potential to create a few problems:
+OpenTelemetry allows Spans to be created to represent any operation, including those which don't involve communication with another component (Kind = Internal).
+These underlying operations can have native status representations from a particular domain or a language such as POSIX status codes, HRESULTs, many variations of exceptions, error messages, HTTP status, or gRPC status.
+ However to capture the status as part of an OpenTelemetry span it must first be mapped to something in OpenTelemetry's object model and this mapping has the potential to create a few problems:
 
 - **Inconsistency** - If the mapping from native representation to OpenTelemetry representation isn't well-defined then API users or SDK implementations are unlikely to choose the same mapping. This makes collected data hard to work with because it can no longer be treated uniformly.
 - **Loss of fidelity** - Mapping from a status representation that distinguishes a large number of different results to one that only distinguishes a few is inherently lossy. This prevents users from isolating different status results they care about. It can also prevent UI from showing useful status information because users don't relate to the reduced representation and the transformation isn't reversible.
